@@ -1,0 +1,28 @@
+.chip-div {
+    display: inline-block;
+    border: 3px solid limegreen;
+    padding: 2.5px 7.5px;
+    font-family: "Roboto";
+    font-weight: 500;
+    font-size: var(--font-s);
+    border-radius: 25px;
+    cursor: pointer;
+    color: limegreen;
+    margin: 5px;
+    animation: fadein 0.5s;
+    -moz-animation: fadein 0.5s;
+    -webkit-animation: fadein 0.5s;
+    -o-animation: fadein 0.5s;
+}
+.chip-div.remove {
+    border: 3px solid red;
+    color: red;
+}
+@keyframes fadein {
+    from {
+        opacity:0;
+    }
+    to {
+        opacity:1;
+    }
+}

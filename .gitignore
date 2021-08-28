@@ -1,0 +1,19 @@
+# Dependencies
+node_modules
+
+# File Uploads
+uploads/
+
+# Production
+build
+
+# Misc
+.DS_Store
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Debug Logs
+npm-debug.log*

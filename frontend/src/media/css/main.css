@@ -1,0 +1,53 @@
+* {
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+@font-face {
+    font-family: 'Roboto';
+    src: local('Roboto'), url(../fonts/Roboto/Roboto-Regular.ttf) format('truetype');
+}
+
+@font-face {
+    font-family: 'Raleway';
+    src: local('Raleway'), url(../fonts/Raleway/Raleway-Regular.ttf) format('truetype');
+}
+
+@font-face {
+    font-family: 'Montserrat';
+    src: local('Montserrat'), url(../fonts/Montserrat/Montserrat-Bold.otf) format('opentype');
+}
+
+@font-face {
+    font-family: 'Noto Sans';
+    src: local('Noto Sans'), url(../fonts/NotoSans/NotoSans-Regular.ttf) format('truetype');
+}
+
+.nav-menu.opened ~ .content-container{
+    margin-left: 220px;
+}
+
+.content-container {
+    transition: 0.2s linear;
+}
+
+:root {
+    /* Color Definations */
+    --blue: #1e90ff;
+    --white: #ffffff;
+    --black: #000000;
+    --red: orangered;
+
+    /* Font Size Definations */
+    --font-xs: 12px;
+    --font-s: 14px;
+    --font-m: 16px;
+    --font-l: 18px;
+    --font-xl: 22px;
+}
+
+.Toastify__toast-body {
+    text-align: left;
+    font-size: var(--font-s);
+}

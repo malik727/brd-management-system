@@ -1,0 +1,51 @@
+.dash-container {
+    min-height: 80vh;
+    padding-top: 100px;
+    padding-bottom: 100px;
+}
+.dash-content {
+    width: 900px;
+    border-radius: 25px;
+    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+    margin: auto;
+    min-height: 300px;
+}
+.dash-metrics {
+    text-align: center;
+}
+.dash-metrics > div {
+    display: inline-block;
+    vertical-align: middle;
+    border-radius: 20px;
+    width: 220px;
+    height: 140px;
+    margin: 25px;
+    margin-top: 40px;
+    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+}
+.dash-metrics-unit {
+   padding: 10px;
+}
+.dash-metrics-unit > div {
+    display: inline-block;
+    vertical-align: middle;
+}
+.dash-metric-unit-s1 {
+    padding: 5px;
+    width: 130px;
+    height: 120px;
+}
+.dash-metric-unit-s2 {
+    text-align: right;
+    width: 70px;
+    height: 70px;
+}
+.dash-tables {
+    display: block;
+    border-radius: 20px;
+    padding: 10px;
+    margin: 20px auto;
+    width: 760px;
+    min-height: 100px;
+    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+}
