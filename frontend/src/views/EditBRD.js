@@ -12,8 +12,6 @@ import { ReplyAll } from '@material-ui/icons';
 import { useHistory } from 'react-router-dom';
 
 
-
-
 export default function EditBRD(props) {
     var navConfig = {
 		loggedIn: props.user.loggedIn, 

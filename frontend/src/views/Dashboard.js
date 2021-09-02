@@ -231,30 +231,26 @@ export default function Dashboard(props) {
                                 <h3 style={{fontFamily: "Montserrat", textAlign: "left", color: "#455A64"}}>Statistics</h3>
                             </div>    
                             <div className="dash-metrics-chart">
-                                {
-                                    loading === false ? (
-                                        <Pie 
-                                            data={{
-                                                labels: ["BRDs Completed", "BRDs Assigned", "BRDs Recently Due"],
-                                                datasets: [{
-                                                    label: 'BRDs',
-                                                    data: ChartData,
-                                                    backgroundColor: ["#2196F3", "#7CB342", "#E65100"]
-                                                }]
-                                            }}
-                                            options={{
-                                                responsive: true,
-                                                maintainAspectRatio: false,
-                                                hoverOffset: 4,
-                                                plugins: {
-                                                    legend: {
-                                                        position: 'right',
-                                                    },
-                                                }
-                                            }}
-                                        />
-                                    ) : ('')
-                                }
+                                <Pie 
+                                    data={{
+                                        labels: ["BRDs Completed", "BRDs Assigned", "BRDs Recently Due"],
+                                        datasets: [{
+                                            label: 'BRDs',
+                                            data: ChartData,
+                                            backgroundColor: ["#2196F3", "#7CB342", "#E65100"]
+                                        }]
+                                    }}
+                                    options={{
+                                        responsive: true,
+                                        maintainAspectRatio: false,
+                                        hoverOffset: 4,
+                                        plugins: {
+                                            legend: {
+                                                position: 'right',
+                                            },
+                                        }
+                                    }}
+                                />
                             </div>      
                         </div>
                     </div>

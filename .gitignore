@@ -17,3 +17,8 @@ build
 
 # Debug Logs
 npm-debug.log*
+
+# Ignore IDE specific files
+.idea/
+.vscode/
+*.sw*

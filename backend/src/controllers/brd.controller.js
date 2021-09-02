@@ -157,7 +157,6 @@ class BRDController {
                 const fileHtml = await readFile(path.join(__dirname,'../email-templates/brd-assigned.html'), 'utf8');
                 var template = handlebars.compile(fileHtml);
                 var replacements = {
-                    brd_duedays: 5,
                     brd_link: process.env.FRONTEND_URL+`/view-brd?id=${inp.brd_id}`
                 };
                 var htmlToSend = template(replacements);
@@ -167,7 +166,12 @@ class BRDController {
                     subject: 'New BRD Assigned',
                     html: htmlToSend
                 };
-                transporter.sendMail(mailOptions);
+                transporter.sendMail(mailOptions, (error, info) => {
+                    if (error) {
+                        return console.log(error);
+                    }
+                    console.log('Message %s sent: %s', info.messageId, info.response);
+                });
             }
             res.status(201).json("BRD was assigned successfully!");
         }
