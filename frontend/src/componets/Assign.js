@@ -77,7 +77,6 @@ export default function Assign(props) {
             selectedUsers.push(user);
         }
         props.setAssignedUsers(selectedUsers => [...selectedUsers]);
-        console.log(selectedUsers);
     }
     function RemoveFromAssigned(id)
     {

@@ -18,13 +18,12 @@
     vertical-align: middle;
     border-radius: 20px;
     width: 220px;
-    height: 140px;
-    margin: 25px;
-    margin-top: 40px;
+    height: 150px;
+    margin: 15px 25px;
     box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
 }
 .dash-metrics-unit {
-   padding: 10px;
+   padding: 17.5px 10px;
 }
 .dash-metrics-unit > div {
     display: inline-block;
@@ -39,6 +38,10 @@
     text-align: right;
     width: 70px;
     height: 70px;
+}
+.dash-metrics-chart canvas {
+    width: 330px;
+    height: 130px;
 }
 .dash-tables {
     display: block;

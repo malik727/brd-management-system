@@ -42,6 +42,31 @@ class AttachmentModel {
         return result;
     }
 
+    findByAttId = async (id) => {
+        let sql = `SELECT * FROM attachment_brd WHERE attachment_id = ?`;
+        let result = await query(sql, [id]);
+        console.log(id);
+        return result;
+    }
+
+    findUserBRDIn = async (params) => {
+        if(Array.isArray(params) && params.length >= 1)
+        {
+            let valueSet = [];
+            let columnSet = [];
+            for(let param of params)
+            {
+                valueSet.push(param.id);
+                columnSet.push("?");
+            }
+            columnSet = columnSet.join(', ');
+            const sql = `SELECT * FROM user_brd WHERE brd_id IN (${columnSet})`;
+            const result = await query(sql, [...valueSet]);
+            return result;
+        }
+        return false;
+    }
+
     create = async (name, ref) => {
         const sql = `INSERT INTO ${this.tableName} (name, reference) VALUES (?,?)`;
         const result = await query(sql, [name, ref])
@@ -54,6 +79,8 @@ class AttachmentModel {
         const result = await query(sql, [attId, brdId])
         return result ? true : false;
     };
+
+
 
     delete = async (id) => {
         const sql = `DELETE FROM ${this.tableName} WHERE id = ?`;

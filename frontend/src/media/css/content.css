@@ -292,6 +292,9 @@
     font-family: "Noto Sans";
     font-weight: 500;
 }
+.brd-details-purpose {
+    font-weight: 400 !important;
+}
 .brd-details-purpose ol, ul{
     list-style-position: inside;
     margin: 10px;
@@ -308,8 +311,16 @@
     border-radius: 10px;
 }
 
+.brd-details-files.disabled {
+    cursor: not-allowed;
+}
+
 .brd-details-files:hover {
     border: 2px solid var(--blue);
+}
+
+.brd-details-files.disabled:hover {
+    border: 2px solid transparent;
 }
 
 .brd-details-files p{

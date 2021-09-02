@@ -10,8 +10,10 @@ import { Launch } from '@material-ui/icons';
 import DueDateIcon from '../media/images/due-brds.png';
 import AssignedBRDIcon from '../media/images/assigned-brds.png';
 import CompletedBRDIcon from '../media/images/completed-brds.png';
+import PastDueBRDIcon from '../media/images/pastdue-brds.png';
 import MaterialTable from 'material-table';
 import { tableIcons } from '../utils/MaterialTableConfig';
+import { Pie } from 'react-chartjs-2';
 import LoadingGif from '../media/images/loader.gif'
 import { useHistory } from 'react-router-dom';
 
@@ -19,7 +21,6 @@ export default function Dashboard(props) {
 	const notify = (msg, type) => {
 		if(type === "error")
 		{
-			console.log(msg);
 			toast.error(msg, {
 				position: toast.POSITION.TOP_RIGHT,
 			});
@@ -37,9 +38,10 @@ export default function Dashboard(props) {
 	}
     const history = useHistory();
     const [ loading, setLoading ] = useState(true);
-    const [ assignedCount, setAssignedCount ] = useState("-");
-    const [ completedCount, setCompletedCount ] = useState("-");
-    const [ dueCount, setDueCount ] = useState("-");
+    const [ assignedCount, setAssignedCount ] = useState(0);
+    const [ completedCount, setCompletedCount ] = useState(0);
+    const [ pastCount, setPastCount ] = useState(0);
+    const [ dueCount, setDueCount ] = useState(0);
     const [cols, setCols] = useState([
         { title: 'BRD Title', field: 'title', width: "80%" },
         { title: 'Priority', field: 'priority', width: "10%" },
@@ -92,6 +94,9 @@ export default function Dashboard(props) {
                     if (result.status === 200) {
                         if(Array.isArray(result.data) && result.data.length >= 1)
                         {
+                            result.data.map((brd) => {
+                                console.log(brd);
+                            });
                             setCompletedCount(result.data.length);
                         }
                         else if (Array.isArray(result.data) && result.data.length === 0)
@@ -122,8 +127,17 @@ export default function Dashboard(props) {
                         {
                             const temp = [];
                             const dueData = result.data;
+                            const today = new Date(new Date().toDateString());
                             dueData.forEach((obj) => {
-                                temp.push({ id: obj.id, title: obj.title, priority: obj.priority, due_date: convertDate(obj.due_date) });
+                                const brd_due_date = new Date(obj.due_date);
+                                if(brd_due_date < today)
+                                {
+                                    setPastCount(pastCount + 1);
+                                }
+                                else
+                                {
+                                    temp.push({ id: obj.id, title: obj.title, priority: obj.priority, due_date: convertDate(obj.due_date) });
+                                }
                             });
                             setRows(temp);
                             setDueCount(result.data.length);
@@ -150,12 +164,15 @@ export default function Dashboard(props) {
         }
         FetchData();
     }, []);
+    const ChartData = [completedCount, assignedCount, dueCount];
+
     return(
         <div>
             <Header config={navConfig} />
             <ToastContainer />
             <div className="dash-container content-container">
                 <div className="dash-content">
+                    <br/><br/>
                     <div className="dash-metrics">
                         <div className="dash-metrics-unit">
                             <div className="dash-metric-unit-s1">
@@ -195,6 +212,50 @@ export default function Dashboard(props) {
                             <div className="dash-metric-unit-s2">
                                 <img src={CompletedBRDIcon} width="65" />
                             </div>
+                        </div>
+                        <div className="dash-metrics-unit">
+                            <div className="dash-metric-unit-s1">
+                                <h4 style={{fontFamily: "Montserrat", textAlign: "left", color: "#455A64"}}>BRDs Past Due Date</h4>
+                                {loading?(
+                                    <img src={LoadingGif} style={{margin: "10px auto"}} width="50" />
+                                ):(
+                                    <p style={{fontFamily: "Noto Sans", fontWeight: "600", fontSize: "34px", margin: "10px auto"}}>{pastCount}</p>
+                                )}
+                            </div>
+                            <div className="dash-metric-unit-s2">
+                                <img src={PastDueBRDIcon} width="65" />
+                            </div>
+                        </div>
+                        <div className="dash-metrics-unit" style={{width: "490px", padding: "10px 17.5px", textAlign: "center"}}>
+                            <div style={{textAlign: "left", width: "120px"}}>
+                                <h3 style={{fontFamily: "Montserrat", textAlign: "left", color: "#455A64"}}>Statistics</h3>
+                            </div>    
+                            <div className="dash-metrics-chart">
+                                {
+                                    loading === false ? (
+                                        <Pie 
+                                            data={{
+                                                labels: ["BRDs Completed", "BRDs Assigned", "BRDs Recently Due"],
+                                                datasets: [{
+                                                    label: 'BRDs',
+                                                    data: ChartData,
+                                                    backgroundColor: ["#2196F3", "#7CB342", "#E65100"]
+                                                }]
+                                            }}
+                                            options={{
+                                                responsive: true,
+                                                maintainAspectRatio: false,
+                                                hoverOffset: 4,
+                                                plugins: {
+                                                    legend: {
+                                                        position: 'right',
+                                                    },
+                                                }
+                                            }}
+                                        />
+                                    ) : ('')
+                                }
+                            </div>      
                         </div>
                     </div>
                     <div className="dash-tables">

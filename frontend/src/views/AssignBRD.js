@@ -74,7 +74,6 @@ export default function AssignBRD(props) {
                     if (result.status === 200) {
                         var users = [];
                         result.data.map((user) => {
-                            console.log(user);
                             users.push({id: user.id, name: user.first_name+" "+user.last_name, brd_id: brdId});
                         });
                         setAssignedUsers([...users]);
@@ -122,7 +121,6 @@ export default function AssignBRD(props) {
         }
         else if(assignedUsers.length >= 1)
         {
-            console.log(assignedUsers);
             await axiosInstance.post('/brds/assign', {
                 assignees: assignedUsers
             }).then(
@@ -147,7 +145,7 @@ export default function AssignBRD(props) {
             })
             await axiosInstance.patch(`/brds/id/${brdId}`, {
                 status: "Assigned",
-                due_date: brdDueDate
+                due_date: handleDate(brdDueDate)
             }).then(
                 result => {
                     if (result.status === 200) {

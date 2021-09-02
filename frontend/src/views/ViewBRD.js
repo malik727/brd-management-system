@@ -28,6 +28,7 @@ import DocIcon from '../media/images/file-icons/doc.png';
 import TxtIcon from '../media/images/file-icons/txt.png';
 import ZipIcon from '../media/images/file-icons/zip.png';
 import XlsIcon from '../media/images/file-icons/xls.png';
+import { LinearProgress } from '@material-ui/core';
 
 export default function ViewBRD(props) {
     var navConfig = {
@@ -57,6 +58,7 @@ export default function ViewBRD(props) {
     const location = useLocation();
     const history = useHistory();
     const [ loading, setLoading ] = useState(false);
+    const [ fileLoading, setFileLoading ] = useState(false);
     const [ updateLoading, setUpdateLoading ] = useState(false);
     const [ openConfirm, setOpenConfirm ] = useState(false);
     const [ brdDetails, setBrdDetails ] = useState(false);
@@ -177,12 +179,13 @@ export default function ViewBRD(props) {
         var y = date.getFullYear();
         return d+" "+m+" "+y;
     }
-    function DisplayBRDStatus(due_date = new Date())
+    function DisplayBRDStatus(due_date = new Date(new Date().toDateString()))
     {
         if(brdDetails.status === "Assigned")
         {
-            var d1 = new Date();
+            var d1 = new Date(new Date().toDateString());
             var d2 = new Date(due_date);
+            d2 = new Date(d2.toDateString());
             if(d1 > d2)
             {
                 return <Alert style={{width: "340px", textAlign: "left", margin: "auto"}} severity="error"><AlertTitle><strong>Due on:</strong>&nbsp;&nbsp;{convertDate(brdDetails.due_date)}</AlertTitle>This BRD is past its due date.</Alert>
@@ -200,6 +203,34 @@ export default function ViewBRD(props) {
         {
             return <Alert style={{width: "340px", textAlign: "left", margin: "auto"}} severity="warning">This BRD is not assigned to anyone. Visit "Pending BRDs" section if you want to assign this BRD to an employee.</Alert>
         }
+    }
+    async function DownloadAttachment(fileKey)
+    {
+        setFileLoading(true);
+        await axiosInstance.get(`/attachments/key/${fileKey}`, {responseType: 'blob'}).then(
+            result => {
+                setFileLoading(false);
+                if(result.status === 200)
+                {
+                    const url = window.URL.createObjectURL(new Blob([result.data]));
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.setAttribute('download', fileKey);
+                    document.body.appendChild(link);
+                    link.click();
+                }
+            }
+        ).catch(error => {
+            setFileLoading(false);
+            if(error.code === 'ECONNABORTED')
+            {
+                notify("Failed to communicate with the server! Please ensure you have stable internet connection.", "error");
+            }
+            else
+            {
+                notify("Failed to download the file! Please try later.");
+            }
+        });
     }
     return(
         <div>
@@ -328,6 +359,14 @@ export default function ViewBRD(props) {
                                 <h4 className="brd-details-elem-h">BRD Attachments</h4>
                                 <div style={{textAlign: "center", margin: "10px 5px"}}>
                                 {
+                                    attachmentFound ? (
+                                        fileLoading ? (
+                                            <LinearProgress />
+                                        ) :
+                                        ('')
+                                    ) : ('')
+                                }
+                                {
                                     loading ? (
                                         <>
                                             <Skeleton animation="wave" style={{margin: "5px 15px", width: "75px", height: "85px", display: "inline-block"}} />
@@ -338,7 +377,7 @@ export default function ViewBRD(props) {
                                         attachmentFound ? (
                                             brdAttachments.map((att) => {
                                                 const ext = att.name.split('.').pop();
-                                                return <div key={att.id} className="brd-details-files"><img src={fileExtIcons[ext]} width="70px" /><p>{att.name}</p></div>
+                                                return <div key={att.id} onClick={() => { if(fileLoading === false) { DownloadAttachment(att.reference); } }} className={`brd-details-files ${fileLoading?('disabled'):('')}`} ><img src={fileExtIcons[ext]} width="70px" /><p>{att.name}</p></div>
                                             })
                                         ) : (
                                             <p className="brd-details-elem-p" style={{color: "var(--red)", fontWeight: 600, fontSize: "14px"}}>No files attached with this BRD!</p>

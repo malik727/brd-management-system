@@ -289,7 +289,7 @@ export default function CreateBRD(props) {
                                         <Button variant="contained" style={{borderRadius: "25px", textTransform: "none", fontWeight: "600"}} color="primary" onClick={() => { HandleCreateBRD() }} endIcon={<ArrowForward />} >Next</Button>
                                     ):(
                                         <div>
-                                            <Button variant="contained" style={{borderRadius: "25px", textTransform: "none", fontWeight: "600"}} color="primary" disabled endIcon={<ArrowForward />} >Next</Button>
+                                            <Button variant="contained" style={{borderRadius: "25px", textTransform: "none", fontWeight: "600"}} color="primary" disabled endIcon={<ArrowForward />} >Next</Button><br/>
                                             <p className="error-text">{error}</p>
                                         </div>
                                     )

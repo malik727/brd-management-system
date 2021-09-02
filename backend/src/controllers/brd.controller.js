@@ -7,14 +7,18 @@ const nodemailer = require('nodemailer');
 const transporter = nodemailer.createTransport({
     host: process.env.SMTP_HOST,
     port: process.env.SMTP_PORT,
-    secure: true,
+    secure: false,
     auth: {
         user: process.env.SMTP_USERNAME,
         pass: process.env.SMTP_PASS
     }
 });
+const fs = require('fs');
+const { promisify } = require('util');
+const readFile = promisify(fs.readFile);
 const dotenv = require('dotenv');
-const { assignee } = require('../models/brd.model');
+const path = require('path');
+const handlebars = require('handlebars');
 dotenv.config();
 
 class BRDController {
@@ -96,10 +100,10 @@ class BRDController {
         else
         {
             const brd = await BRDModel.findBRD(user_id, req.params.id);
-            if (!brd) {
+            if (!brd[0]) {
                 throw new HttpException(404, 'BRD not found');
             }
-            res.json(brd);
+            res.json(brd[0]);
         }
     };
 
@@ -148,10 +152,22 @@ class BRDController {
             await BRDModel.deleteAssignees(inputs[0].brd_id);
             for(let inp of inputs)
             {
-                // ------------ ### *** ### -------------
-                // Send mail to every assignee from here
-                // --------------------------------------
+                const user = await UserModel.findOne({ id: inp.id });
                 await BRDModel.addAssignee(inp.id, inp.brd_id);
+                const fileHtml = await readFile(path.join(__dirname,'../email-templates/brd-assigned.html'), 'utf8');
+                var template = handlebars.compile(fileHtml);
+                var replacements = {
+                    brd_duedays: 5,
+                    brd_link: process.env.FRONTEND_URL+`/view-brd?id=${inp.brd_id}`
+                };
+                var htmlToSend = template(replacements);
+                const mailOptions = {
+                    from: '"BRD Portal" <brdportal.askaribank@gmail.com>',
+                    to: user.email,
+                    subject: 'New BRD Assigned',
+                    html: htmlToSend
+                };
+                transporter.sendMail(mailOptions);
             }
             res.status(201).json("BRD was assigned successfully!");
         }
@@ -193,7 +209,6 @@ class BRDController {
         var dueDate = this.addDaysToDate(today, days);
         today = new Date(today).getTime();
         dueDate = new Date(dueDate).getTime();
-        console.log("Due: "+dueDate);
         const options = {
             host: 'www.googleapis.com',
             port: 443,

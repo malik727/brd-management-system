@@ -1,7 +1,7 @@
 const AttachmentModel = require('../models/attachment.model');
 const HttpException = require('../utils/HttpException.utils');
-const { validationResult } = require('express-validator');
 const dotenv = require('dotenv');
+const fs = require('fs')
 dotenv.config();
 
 class AttachmentController {
@@ -15,7 +15,7 @@ class AttachmentController {
             var fileKeys = Object.keys(req.files.attachment);
             fileKeys.forEach(function(key) {
                 const fileSize = (req.files.attachment[key].size / (1024*1024)).toFixed(2);
-                const fileExt = req.files.attachment.name.split('.').pop().toLowerString();
+                const fileExt = req.files.attachment[key].name.split('.').pop().toString().toLowerCase();
                 if(!['pdf', 'doc', 'docx', 'xls', 'xlsx', 'txt'].includes(fileExt))
                 {
                     return res.status(400).json('One or more attachments are not allowed!');
@@ -30,7 +30,7 @@ class AttachmentController {
         else
         {
             const fileSize = (req.files.attachment.size / (1024*1024)).toFixed(2);
-            const fileExt = req.files.attachment.name.split('.').pop().toLowerString();
+            const fileExt = req.files.attachment.name.split('.').pop().toString().toLowerCase();
             if(!['pdf', 'doc', 'docx', 'xls', 'xlsx', 'txt'].includes(fileExt))
             {
                 return res.status(400).json('One or more attachments are not allowed!');
@@ -44,7 +44,7 @@ class AttachmentController {
         var result = [];
         for(let att of attachments)
         {
-            const fileExt = att.name.split('.').pop().toLowerString();
+            const fileExt = att.name.split('.').pop().toString().toLowerCase();
             const timestamp = Date.now();
             const fileName = timestamp+"_"+this.randomString(6)+"."+fileExt;
             att.mv(`public/uploads/${fileName}`, function(err) {
@@ -60,7 +60,6 @@ class AttachmentController {
     };   
 
     bindAttachments = async (req, res, next) => {
-        console.log(req.body);
         if(req.body.brdId && req.body.attachments && Array.isArray(req.body.attachments))
         {
             const brdId = req.body.brdId;
@@ -99,6 +98,81 @@ class AttachmentController {
             throw new HttpException(404, 'Attachments not found!');
         }
         res.status(200).json(attachments);
+    }
+
+    getFile = async (req, res, next) => {
+        const role = req.currentUser.role;
+        const user_id = req.currentUser.id;
+        const fileKey = req.params.key;
+        const filePath = `public/uploads/${fileKey}`;
+        if(!fileKey)
+        {
+            throw new HttpException(400, 'Please provide a valid file key!');
+        }
+        if(role === "Manager" || role === "SuperUser")
+        {
+            fs.access(filePath, fs.F_OK, (err) => {
+                if (err) {
+                    throw new HttpException(404, 'No file found with the provided key!');
+                }
+                res.download(filePath);
+            });
+        }
+        else
+        {
+            const att = await AttachmentModel.find({reference: fileKey});
+            if(!att[0])
+            {
+                throw new HttpException(404, 'No file found with the provided key!');
+            }
+            const brds = await AttachmentModel.findByAttId(att[0].id);
+            if(!brds || brds === [])
+            {
+                throw new HttpException(404, 'No file found with the provided key!');
+            }
+            const brd_ids = [];
+            for(let brd of brds)
+            {
+                if(!brd_ids.includes(brd.brd_id))
+                {
+                    brd_ids.push({id: brd.brd_id});
+                }
+            }
+            const found_users = await AttachmentModel.findUserBRDIn(brd_ids);
+            if(!found_users || found_users === [])
+            {
+                throw new HttpException(404, 'No file found with the provided key!');
+            }
+            var found = false;
+            for(let user of found_users)
+            {
+                if(user_id === user.assignee_id)
+                {
+                    found = true;
+                }
+            }
+            if(found === true)
+            {
+                fs.access(filePath, fs.F_OK, (err) => {
+                    if (err) {
+                        throw new HttpException(404, 'No file found with the provided key!');
+                    }
+                    res.download(filePath);
+                });
+            }
+            else
+            {
+                res.status(404).json('File not Found!');
+            }
+        }
+    }
+
+    delay = (delayInms) => {
+        return new Promise(resolve => {
+          setTimeout(() => {
+            resolve(2);
+          }, delayInms);
+        });
     }
 
     randomString = (length) => {

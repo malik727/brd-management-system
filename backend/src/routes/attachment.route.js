@@ -8,6 +8,7 @@ const awaitHandlerFactory = require('../middleware/awaitHandlerFactory.middlewar
 router.post('/upload', auth(Role.Manager), awaitHandlerFactory(attController.uploadAttachments));
 router.post('/bind', auth(Role.Manager), awaitHandlerFactory(attController.bindAttachments));
 router.get('/brdId/:brdId', auth(), awaitHandlerFactory(attController.getAttachments));
+router.get('/key/:key', auth(), awaitHandlerFactory(attController.getFile));
 // router.delete('/id/:id', auth(), awaitHandlerFactory(brdController.getBRDByID));
 
 module.exports = router;

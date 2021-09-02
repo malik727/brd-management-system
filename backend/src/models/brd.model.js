@@ -27,10 +27,8 @@ class BRDModel {
     }
 
     findBRD = async(user_id, brd_id) => {
-        console.log(user_id);
         const sql = `SELECT * FROM user_brd WHERE assignee_id = ? AND brd_id = ?`;
         const res1 = await query(sql, [user_id, brd_id]);
-        console.log(res1);
         if(res1 && res1.length >= 1)
         {
             const sql2 = `SELECT * FROM ${this.tableName} WHERE id = ?`;

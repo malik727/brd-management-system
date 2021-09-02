@@ -32,7 +32,7 @@ app.options("*", cors());
 const port = Number(process.env.PORT || 3331);
 
 // API Information Endpoint
-app.use('/api/info', (req, res, next) => {
+app.use('/info', (req, res, next) => {
     res.status(200).json({
         "API Name": api_name,
         "Version": `v${api_version} ${api_stability}`,
@@ -41,11 +41,11 @@ app.use('/api/info', (req, res, next) => {
 });
 
 // User Endpoints of API
-app.use(`/api/v${api_version}/users`, userRouter);
+app.use(`/v${api_version}/users`, userRouter);
 // BRD Endpoints of API
-app.use(`/api/v${api_version}/brds`, brdRouter);
+app.use(`/v${api_version}/brds`, brdRouter);
 // Attachment Endpoints of API
-app.use(`/api/v${api_version}/attachments`, attachmentRouter);
+app.use(`/v${api_version}/attachments`, attachmentRouter);
 
 // 404 error
 app.all('*', (req, res, next) => {

@@ -27,9 +27,9 @@ export default function HomePage(props) {
                         <h3>By using this portal you can easily:</h3>
                         <ul>
                             <li><div style={{display: "flex", justifyContent: "left", alignItems: "center"}}><CheckCircle style={{color: "limegreen"}} />&nbsp;&nbsp;<span>Create and Assign BRDs</span></div></li>
-                            <li><div style={{display: "flex", justifyContent: "left", alignItems: "center"}}><CheckCircle style={{color: "limegreen"}} />&nbsp;&nbsp;<span>Update existing BRDs</span></div></li>
+                            <li><div style={{display: "flex", justifyContent: "left", alignItems: "center"}}><CheckCircle style={{color: "limegreen"}} />&nbsp;&nbsp;<span>Access Assigned BRDs</span></div></li>
+                            <li><div style={{display: "flex", justifyContent: "left", alignItems: "center"}}><CheckCircle style={{color: "limegreen"}} />&nbsp;&nbsp;<span>Update Existing BRDs</span></div></li>
                             <li><div style={{display: "flex", justifyContent: "left", alignItems: "center"}}><CheckCircle style={{color: "limegreen"}} />&nbsp;&nbsp;<span>Determine Priority of BRD</span></div></li>
-                            <li><div style={{display: "flex", justifyContent: "left", alignItems: "center"}}><CheckCircle style={{color: "limegreen"}} />&nbsp;&nbsp;<span>Approve or Dismiss a BRD</span></div></li>
                         </ul>
                     </div>
                     <div className="home-image">
