@@ -146,11 +146,9 @@ class BRDModel {
     }
 
     delete = async (id) => {
-        const sql = `DELETE FROM ${this.tableName}
-        WHERE id = ?`;
+        const sql = `UPDATE ${this.tableName} SET status = 'Deleted' WHERE id = ?`;
         const result = await query(sql, [id]);
         const affectedRows = result ? result.affectedRows : 0;
-
         return affectedRows;
     }
 }

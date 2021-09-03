@@ -8,6 +8,7 @@ const awaitHandlerFactory = require('../middleware/awaitHandlerFactory.middlewar
 const { createBRDSchema, updateBRDSchema } = require('../middleware/validators/brdValidator.middleware');
 
 router.get('/due/:days', auth(), awaitHandlerFactory(brdController.getAllDueBRD));
+router.get('/', auth(Role.Manager), awaitHandlerFactory(brdController.getAllBRD));
 router.get('/pending', auth(Role.Manager), awaitHandlerFactory(brdController.getAllPendingBRD));
 router.get('/assigned', auth(), awaitHandlerFactory(brdController.getAllAssignedBRD));
 router.get('/completed', auth(), awaitHandlerFactory(brdController.getAllCompletedBRD));

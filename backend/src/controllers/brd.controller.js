@@ -7,7 +7,7 @@ const nodemailer = require('nodemailer');
 const transporter = nodemailer.createTransport({
     host: process.env.SMTP_HOST,
     port: process.env.SMTP_PORT,
-    secure: false,
+    secure: process.env.SMTP_SSL,
     auth: {
         user: process.env.SMTP_USERNAME,
         pass: process.env.SMTP_PASS
@@ -25,11 +25,17 @@ class BRDController {
 
     getAllPendingBRD = async (req, res, next) => {
         const brdList = await BRDModel.find({status: "Pending"});
-
         if (!brdList.length) {
             throw new HttpException(404, 'BRDs not found');
         }
+        res.json(brdList);
+    };
 
+    getAllBRD = async (req, res, next) => {
+        const brdList = await BRDModel.find();
+        if (!brdList.length) {
+            throw new HttpException(404, 'BRDs not found');
+        }
         res.json(brdList);
     };
 

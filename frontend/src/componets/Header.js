@@ -2,7 +2,7 @@ import { React, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import '../media/css/menus.css';
 import MainLogo from '../media/logos/main-logo.jpg';
-import { Menu, MenuOpen, Dashboard, NoteAdd, Edit, AssignmentTurnedIn, HourglassFull, ExitToApp, Assignment, ExpandMore } from '@material-ui/icons';
+import { Menu, MenuOpen, Dashboard, NoteAdd, Edit, AssignmentTurnedIn, HourglassFull, ExitToApp, Assignment, ExpandMore, Apps, Lock } from '@material-ui/icons';
 import IconButton from '@material-ui/core/IconButton';
 import DefaultAvatar from '../media/images/default-avatar.png';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
@@ -61,7 +61,7 @@ export default function Header(props) {
                                                     <div style={{display: "flex", justifyContent: "left", alignItems: "center"}}><NoteAdd />&nbsp;&nbsp;<span>Create New BRD</span></div>
                                                 </li>
                                             </Link>
-                                            <Link style={{textDecoration: "none", color: "#000"}} to="/edit-brd">
+                                            <Link style={{textDecoration: "none", color: "#000"}} to="/edit-brds">
                                                 <li>
                                                     <div style={{display: "flex", justifyContent: "left", alignItems: "center"}}><Edit />&nbsp;&nbsp;<span>Edit BRDs</span></div>                           
                                                 </li>
@@ -87,6 +87,21 @@ export default function Header(props) {
                                         <div style={{display: "flex", justifyContent: "left", alignItems: "center"}}><AssignmentTurnedIn />&nbsp;&nbsp;<span>Completed BRDs</span></div>
                                     </li>
                                 </Link>
+                                {
+                                    (userRole === "Manager" || userRole === "SuperUser")?(
+                                        <Link style={{textDecoration: "none", color: "#000"}} to="/manage-apps">
+                                            <li>
+                                                <div style={{display: "flex", justifyContent: "left", alignItems: "center"}}><Apps />&nbsp;&nbsp;<span>Manage Apps</span></div>
+                                            </li>
+                                        </Link>
+                                    ) : (
+                                        <Link style={{textDecoration: "none", color: "#000"}} to="/view-apps">
+                                                <li>
+                                                    <div style={{display: "flex", justifyContent: "left", alignItems: "center"}}><Apps />&nbsp;&nbsp;<span>Show Apps</span></div>
+                                                </li>
+                                        </Link>
+                                    )
+                                }
                             </div>
                         </div>
                     </ClickAwayListener>
@@ -132,10 +147,16 @@ export default function Header(props) {
                                 onClose={handleMenuClose}
                                 TransitionComponent={Fade}
                             >
+                                <Link to="/change-password" style={{color: 'inherit', textDecoration: 'none'}}>
+                                    <MenuItem onClick={handleMenuClose}>
+                                        <Lock style={{verticalAlign: 'middle', display: 'inline-block'}} /> 
+                                        <p style={{verticalAlign: 'middle', display: 'inline-block', marginLeft: '5px'}}>Change Password</p>
+                                    </MenuItem>
+                                </Link>
                                 <Link to="/logout" style={{color: 'inherit', textDecoration: 'none'}}>
                                     <MenuItem onClick={handleMenuClose}>
                                         <ExitToApp style={{verticalAlign: 'middle', display: 'inline-block'}} /> 
-                                        <p style={{verticalAlign: 'middle', display: 'inline-block', marginLeft: '5px'}}>Logout</p>
+                                        <p style={{verticalAlign: 'middle', display: 'inline-block', marginLeft: '5px'}}>Account Logout</p>
                                     </MenuItem>
                                 </Link>
                             </MainMenu>

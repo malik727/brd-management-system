@@ -10,9 +10,9 @@ const { createUserSchema, updateUserSchema, validateLogin, updatePasswordSchema 
 router.get('/', auth(), awaitHandlerFactory(userController.getAllUsers));
 router.get('/search', auth(), awaitHandlerFactory(userController.searchUser));
 router.get('/id/:id', auth(), awaitHandlerFactory(userController.getUserById));
-router.get('/employee-id/:empID', auth(), awaitHandlerFactory(userController.getUserByemployeeID));
+router.get('/emp-id/:empID', auth(), awaitHandlerFactory(userController.getUserByemployeeID));
 router.get('/whoami', auth(), awaitHandlerFactory(userController.getCurrentUser));
-router.post('/change-password', auth(), updatePasswordSchema, awaitHandlerFactory(userController.updatePassword));
+router.patch('/change-password', auth(), updatePasswordSchema, awaitHandlerFactory(userController.updatePassword));
 router.post('/', createUserSchema, awaitHandlerFactory(userController.createUser));
 router.patch('/id/:id', auth(), updateUserSchema, awaitHandlerFactory(userController.updateUser));
 router.delete('/id/:id', auth(Role.SuperUser), awaitHandlerFactory(userController.deleteUser));

@@ -5,7 +5,7 @@ import Header from '../componets/Header'
 import Footer from '../componets/Footer'
 import Attachments from '../componets/Attachments';
 import '../media/css/content.css'
-import { ArrowForward, NoteAdd, CheckCircle, Dashboard, Edit, ControlCameraOutlined, ReplyAll } from "@material-ui/icons";
+import { ArrowForward, NoteAdd, Dashboard, ReplyAll } from "@material-ui/icons";
 import CompletedImg from '../media/images/tick-mark.png'
 import LoadingGif from '../media/images/loader.gif'
 import { Button } from '@material-ui/core';
@@ -53,7 +53,7 @@ export default function CreateBRD(props) {
     const [currentStep, setCurrentStep] = useState(1);
     const [loading, setLoading] = useState(false);
     const [attachments, setAttachments] = useState([]);
-    const [brdId, setBrdId] = useState(1);
+    const [brdId, setBrdId] = useState(false);
     const [brdTitle, setBrdTitle] = useState("");
     const [brdOrigin, setBrdOrigin] = useState("");
     const [brdJustification, setBrdJustification] = useState("");

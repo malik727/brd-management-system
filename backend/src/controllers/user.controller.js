@@ -65,25 +65,38 @@ class UserController {
 
     updateUser = async (req, res, next) => {
         this.checkValidation(req);
-
-        await this.hashPassword(req);
-
+        const role = req.currentUser.role;
+        const user_id = req.currentUser.id;
         const { ...userUpdates } = req.body;
-
-        // do the update query and get the result
-        // it can be partial edit
-        const result = await UserModel.update(userUpdates, req.params.id);
-
-        if (!result) {
-            throw new HttpException(404, 'Something went wrong');
+        if(role === "Manager" || role === "SuperUser")
+        {
+            const result = await UserModel.update(userUpdates, req.params.id);
+            if (!result) {
+                throw new HttpException(404, 'Something went wrong');
+            }
+            const { affectedRows, changedRows, info } = result;
+            const message = !affectedRows ? 'User not found' :
+                affectedRows && changedRows ? 'User updated successfully' : 'Failed to update user details';
+            res.json({ message, info });
         }
-
-        const { affectedRows, changedRows, info } = result;
-
-        const message = !affectedRows ? 'User not found' :
-            affectedRows && changedRows ? 'User updated successfully' : 'Failed to update user details';
-
-        res.json({ message, info });
+        else
+        {
+            if(req.params.id === user_id)
+            {
+                const result = await UserModel.update(userUpdates, user_id);
+                if (!result) {
+                    throw new HttpException(404, 'Something went wrong');
+                }
+                const { affectedRows, changedRows, info } = result;
+                const message = !affectedRows ? 'User not found' :
+                    affectedRows && changedRows ? 'User updated successfully' : 'Failed to update user details';
+                res.json({ message, info });
+            }
+            else
+            {
+                res.status(400).json("Not allowed to update other users information!");
+            }
+        }
     };
 
     updatePassword = async (req, res, next) => {

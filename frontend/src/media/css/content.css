@@ -52,12 +52,11 @@
     top: 0;
     display: block;
     transition: 0.2s;
-    font-size: var(--font-s);
     color: #566573;
     font-weight: 600;
+    font-size: var(--font-s);
 }
 .form-inp-field:focus {
-    padding-bottom: 6px;
     font-weight: 500;
     border-width: 3px;
     border-image: linear-gradient(to right, var(--blue), var(--blue));

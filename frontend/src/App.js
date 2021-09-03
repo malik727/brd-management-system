@@ -10,6 +10,7 @@ import Logout from './views/Logout';
 import Dashboard from './views/Dashboard';
 import CreateBRD from './views/CreateBRD';
 import AssignBRD from './views/AssignBRD';
+import EditBRDs from './views/EditBRDs';
 import EditBRD from './views/EditBRD';
 import PendingBRD from './views/PendingBRD';
 import AssignedBRD from './views/AssignedBRD';
@@ -99,6 +100,7 @@ class App extends React.Component
 						</Route>
 						<ProtectedRoute exact path="/dashboard" component={Dashboard}  dataProp={user} dataPropName="user" />
 						<ProtectedRoute exact path="/create-brd" component={CreateBRD} dataProp={user} dataPropName="user" />
+						<ProtectedRoute exact path="/edit-brds" component={EditBRDs} dataProp={user} dataPropName="user" />
 						<ProtectedRoute exact path="/edit-brd" component={EditBRD} dataProp={user} dataPropName="user" />
 						<ProtectedRoute exact path="/view-brd" component={ViewBRD} dataProp={user} dataPropName="user" />
 						<ProtectedRoute exact path="/assign-brd" component={AssignBRD} dataProp={user} dataPropName="user" />
