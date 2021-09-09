@@ -45,7 +45,6 @@ class AttachmentModel {
     findByAttId = async (id) => {
         let sql = `SELECT * FROM attachment_brd WHERE attachment_id = ?`;
         let result = await query(sql, [id]);
-        console.log(id);
         return result;
     }
 
@@ -80,13 +79,16 @@ class AttachmentModel {
         return result ? true : false;
     };
 
-
+    addAttachmentLog = async ({name, reference, brd_id, removed_by, date_attached}) => {
+        const sql = `INSERT INTO attachment_logs (name, reference, brd_id, removed_by, date_attached) VALUES (?,?,?,?,?)`;
+        const result = await query(sql, [name, reference, brd_id, removed_by, date_attached])
+        return result ? true : false;
+    }
 
     delete = async (id) => {
         const sql = `DELETE FROM ${this.tableName} WHERE id = ?`;
         const result = await query(sql, [id]);
-        const affectedRows = result ? result.affectedRows : 0;
-        return affectedRows;
+        return result ? true : false;
     };
 }
 

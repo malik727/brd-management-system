@@ -2,7 +2,7 @@ import { React, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import '../media/css/menus.css';
 import MainLogo from '../media/logos/main-logo.jpg';
-import { Menu, MenuOpen, Dashboard, NoteAdd, Edit, AssignmentTurnedIn, HourglassFull, ExitToApp, Assignment, ExpandMore, Apps, Lock } from '@material-ui/icons';
+import { Menu, MenuOpen, Dashboard, NoteAdd, Edit, AssignmentTurnedIn, HourglassFull, ExitToApp, Assignment, ExpandMore, Apps, Settings } from '@material-ui/icons';
 import IconButton from '@material-ui/core/IconButton';
 import DefaultAvatar from '../media/images/default-avatar.png';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
@@ -147,16 +147,16 @@ export default function Header(props) {
                                 onClose={handleMenuClose}
                                 TransitionComponent={Fade}
                             >
-                                <Link to="/change-password" style={{color: 'inherit', textDecoration: 'none'}}>
+                                <Link to="/settings" style={{color: 'inherit', textDecoration: 'none'}}>
                                     <MenuItem onClick={handleMenuClose}>
-                                        <Lock style={{verticalAlign: 'middle', display: 'inline-block'}} /> 
-                                        <p style={{verticalAlign: 'middle', display: 'inline-block', marginLeft: '5px'}}>Change Password</p>
+                                        <Settings style={{verticalAlign: 'middle', display: 'inline-block'}} /> 
+                                        <p style={{verticalAlign: 'middle', display: 'inline-block', marginLeft: '5px'}}>Settings</p>
                                     </MenuItem>
                                 </Link>
                                 <Link to="/logout" style={{color: 'inherit', textDecoration: 'none'}}>
                                     <MenuItem onClick={handleMenuClose}>
                                         <ExitToApp style={{verticalAlign: 'middle', display: 'inline-block'}} /> 
-                                        <p style={{verticalAlign: 'middle', display: 'inline-block', marginLeft: '5px'}}>Account Logout</p>
+                                        <p style={{verticalAlign: 'middle', display: 'inline-block', marginLeft: '5px'}}>Logout</p>
                                     </MenuItem>
                                 </Link>
                             </MainMenu>

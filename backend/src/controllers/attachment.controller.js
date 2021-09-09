@@ -167,6 +167,33 @@ class AttachmentController {
         }
     }
 
+    deleteAttachment = async (req, res, next) => {
+        const user_id = req.currentUser.id;
+        const attId = req.params.id;
+        const att = await AttachmentModel.find({id: attId});
+        var brdId = 0;
+        if(!att[0])
+        {
+            throw new HttpException(404, 'No attachment found!');
+        }
+        const deleted = await AttachmentModel.delete(attId);
+        if(deleted)
+        {
+            console.log("One Hurray!");
+        }
+        const brd = await AttachmentModel.findByAttId(att[0].id);
+        if(brd[0])
+        {
+            brdId = brd[0].brd_id;    
+        }
+        const result = await AttachmentModel.addAttachmentLog({name: att[0].name, reference: att[0].reference, brd_id: brdId, removed_by: user_id, date_attached: att[0].date_attached});
+        if(!result)
+        {
+            throw new HttpException(500, 'Failed to remove attachment! Please try again');
+        }
+        res.status(200).json('Attachment removed successfully!');
+    }
+
     delay = (delayInms) => {
         return new Promise(resolve => {
           setTimeout(() => {

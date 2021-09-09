@@ -27,8 +27,9 @@
     font-size: var(--font-s);
 }
 .form-head-img {
-    width: 80px;
+    width: 100px;
     margin: 20px auto;
+    margin-bottom: 0px;
 }
 .form-input {
     font-family: 'Noto Sans';

@@ -112,6 +112,7 @@ export default function EditBRD(props) {
                 result => {
                     if (result.status === 200) {
                         setAttachmentFound(true);
+                        console.log(result.data);
                         setBrdAttachments(result.data);
                     }
                 }

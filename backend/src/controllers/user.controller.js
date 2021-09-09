@@ -101,22 +101,18 @@ class UserController {
 
     updatePassword = async (req, res, next) => {
         this.checkValidation(req);
-        await this.hashPassword(req);
-        const verifyPass = await UserModel.verifyPassword(req.params.id, req.params.password);
-        if(verifyPass == true)
+        const user_id = req.currentUser.id;
+        const password = req.body.password;
+        const new_password = await bcrypt.hash(req.body.new_password, 8);
+        const user = await UserModel.findOne({ id: user_id });
+        const isMatch = await bcrypt.compare(password, user.password);
+        if(isMatch === true)
         {
-            const { new_password } = req.body;
-            const result = await UserModel.update({password: new_password}, req.params.id);
+            const result = await UserModel.update({password: new_password}, user_id);
             if (!result) {
-                throw new HttpException(404, 'Something went wrong');
+                throw new HttpException(400, 'Something went wrong! Please try again');
             }
-    
-            const { affectedRows, changedRows, info } = result;
-    
-            const message = !affectedRows ? 'User not found' :
-                affectedRows && changedRows ? 'User details updated successfully' : 'Failed to update user details';
-    
-            res.json({ message, info });
+            res.status(200).json("Password updated successfully!");
         }
         else
         {

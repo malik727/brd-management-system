@@ -18,6 +18,7 @@ import CompletedBRD from './views/CompletedBRD';
 import ViewBRD from './views/ViewBRD';
 import LoadingGif from './media/images/loader.gif';
 import './media/css/main.css';
+import Settings from './views/Settings';
 
 const theme = createTheme({
     palette: {
@@ -98,6 +99,7 @@ class App extends React.Component
 						<Route exact path="/logout">
 							<Logout />
 						</Route>
+						<ProtectedRoute exact path="/settings" component={Settings}  dataProp={user} dataPropName="user" />
 						<ProtectedRoute exact path="/dashboard" component={Dashboard}  dataProp={user} dataPropName="user" />
 						<ProtectedRoute exact path="/create-brd" component={CreateBRD} dataProp={user} dataPropName="user" />
 						<ProtectedRoute exact path="/edit-brds" component={EditBRDs} dataProp={user} dataPropName="user" />

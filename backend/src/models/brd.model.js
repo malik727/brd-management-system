@@ -59,11 +59,12 @@ class BRDModel {
         return false;
     }
 
-    create = async ({ created_by, approved_by, origin, title, justification, priority, status, purpose }) => {
+    create = async ({ created_by, origin, title, justification, priority, status, purpose }) => {
         const sql = `INSERT INTO ${this.tableName}
         (created_by, origin, title, justification, priority, status, purpose) VALUES (?,?,?,?,?,?,?)`;
-        const result = await query(sql, [created_by, origin, title, justification, priority, status, purpose])
+        const result = await query(sql, [created_by, origin, title, justification, priority, status, purpose]);
         const insertID = result ? result.insertId : 0;
+        await this.addBrdLog({ brd_id: insertID, created_by: created_by, action_by: created_by, origin: origin, title: title, justification: justification, priority: priority, status: status, purpose: purpose });
         return insertID;
     }
 
@@ -131,6 +132,27 @@ class BRDModel {
         const result = await query(sql, [...values, id]);
 
         return result;
+    }
+
+    addBrdLog = async ({ brd_id, created_by, action_by, origin, title, justification, priority, status, purpose, creation_date }) => {
+        var result = false;
+        if(!creation_date)
+        {
+            const sql = `INSERT INTO brd_logs
+            (brd_id, created_by, action_by, origin, title, justification, priority, status, purpose) VALUES (?,?,?,?,?,?,?,?,?)`;
+            result = await query(sql, [brd_id, created_by, action_by, origin, title, justification, priority, status, purpose])
+        }
+        else
+        {
+            const sql = `INSERT INTO brd_logs
+            (brd_id, created_by, action_by, origin, title, justification, priority, status, purpose, creation_date) VALUES (?,?,?,?,?,?,?,?,?,?)`;
+            result = await query(sql, [brd_id, created_by, action_by, origin, title, justification, priority, status, purpose, creation_date])
+        }
+        if(!result)
+        {
+            return false;
+        }
+        return true;
     }
 
     addAssignee = async(user_id, brd_id) => {

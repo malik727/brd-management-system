@@ -124,22 +124,17 @@ class BRDController {
 
     updateBRD = async (req, res, next) => {
         this.checkValidation(req);
-
+        const user_id = req.currentUser.id;
         const { ...brdUpdates } = req.body;
-
-        // do the update query and get the result
-        // it can be partial edit
         const result = await BRDModel.update(brdUpdates, req.params.id);
-
         if (!result) {
             throw new HttpException(404, 'Something went wrong');
         }
-
+        const brd = await BRDModel.findOne({id: req.params.id});
+        const log_brd = await BRDModel.addBrdLog({brd_id: brd.id, created_by: brd.created_by, action_by: user_id, origin: brd.origin, title: brd.title, justification: brd.justification, priority: brd.priority, status: brd.status, purpose: brd.purpose, creation_date: brd.creation_date});
         const { affectedRows, changedRows, info } = result;
-
         const message = !affectedRows ? 'BRD not found' :
             affectedRows && changedRows ? 'BRD updated successfully' : 'Failed to update BRD details';
-
         res.json({ message, info });
     };
 

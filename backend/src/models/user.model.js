@@ -59,11 +59,8 @@ class UserModel {
 
     update = async (params, id) => {
         const { columnSet, values } = multipleColumnSet(params)
-
         const sql = `UPDATE ${this.tableName} SET ${columnSet} WHERE id = ?`;
-
         const result = await query(sql, [...values, id]);
-
         return result;
     }
 
@@ -93,13 +90,6 @@ class UserModel {
             result = await query(sql, ['%'+squery[0]+'%', '%'+squery[0]+'%']);
         }
         return result;
-    }
-
-    // This function returns true if the user password is authentic
-    verifyPassword = async (id, hashed_password) => {
-        const sql = `SELECT * FROM ${this.tableName} WHERE id = ? AND password = ? LIMIT 10`;
-        const result = await query(sql, [id, hashed_password]);
-        return result ? true : false;
     }
 }
 

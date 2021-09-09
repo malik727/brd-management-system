@@ -95,8 +95,8 @@ export default function LoginPage(props) {
             <Header config={navConfig} />
             <div className="login-container">
                 <div className="login-content">
-                    <h3 style={{fontFamily: "Montserrat"}}>Login to your Account</h3>
-                    <img alt="Login Form" src={LoginImg} className="form-head-img" />
+                    <h2 style={{fontFamily: "Montserrat"}}>Login to your Account</h2>
+                    <img alt="Login Form" src={LoginImg} style={{width: "80px", marginBottom: "10px"}} className="form-head-img" />
                     <div className="form-input-div">
                         <span className="form-input-icon"><AccountCircle /></span>
                         <input className="form-input" onChange={(event) => { setEmpID(event.target.value) }} placeholder="Employee Number" type="text" required/>
